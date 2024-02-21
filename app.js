@@ -1,8 +1,7 @@
 const express = require('express');
 const body_parser = require('body-parser');
-
-const mongo_db = require('./mongo_db');
-const connect_notesdb = require('./mongo_db');
+const registerUser = require('./register_user')
+const connect_getnotesdb = require('./database/getnotesdb')
 
 const app = express();
 
@@ -13,7 +12,14 @@ app.get("/", (req, res) => {
     return res.send("API Started on port 3000");
 });
 
-note = connect_notesdb();
+// Example usage:
+const username = "exampleUser";
+const password = "examplePassword";
+
+registerUser(username, password)
+
+
+
 
 app.listen(3000, () => {
   console.log('Listening on port http://localhost:3000/')
