@@ -14,7 +14,7 @@ function connect_getnotesdb(){
         noteId: { type:[String], default: ['Created'] } // Reference to the Array of Notes collection
     });
 
-    const GetNotes = getnoteDB.model('User', getnotesSchema);
+    const GetNotes = getnoteDB.model('GetNotes', getnotesSchema);
     return GetNotes        
 };
 
