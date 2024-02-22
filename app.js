@@ -1,7 +1,11 @@
 const express = require('express');
 const body_parser = require('body-parser');
+
 const registerUser = require('./src/register_user')
 const signInUser = require('./src/sign_in')
+const addNote = require('./src/add_note')
+const getNoteById = require('./src/get_note')
+const getAllNotes = require('./src/get_all_notes')
 
 const app = express();
 
@@ -13,7 +17,7 @@ app.get("/", (req, res) => {
 });
 
 
-// Authentication/ Registration API End point
+// Registration route
 app.post('/api/auth/signup', async (req, res) => {
   try {
       const { username, password } = req.body;
@@ -43,8 +47,41 @@ app.post("/api/auth/signin", async (req, res) => {
   }
 });
 
+// Add Note route
+app.post("/api/notes", async (req, res) => {
+  const { userid, title, content } = req.body;
+
+  try {
+      const noteId = await addNote(userid, title, content);
+      res.status(201).json({ noteId, message: title + " Note created successfully." });
+  } catch (error) {
+      res.status(500).json({ error: error.message });
+  }
+});
 
 
+// Get Note by ID route
+app.get("/api/notes/:noteID", async (req, res) => {
+  const noteId = req.params.noteID;
+
+  try {
+      const note = await getNoteById(noteId);
+      res.status(200).json(note);
+  } catch (error) {
+      res.status(500).json({ error: error.message });
+  }
+});
+
+// Get all Notes route
+app.get("/api/notes", async (req, res) => {
+  const { userid } = req.query;
+  try {
+      const notesList = await getAllNotes(userid);
+      res.status(200).json(notesList);
+  } catch (error) {
+      res.status(500).json({ error: error.message });
+  }
+});
 
 app.listen(3000, () => {
   console.log('Listening on port http://localhost:3000/')

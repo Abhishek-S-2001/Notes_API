@@ -20,16 +20,17 @@ Your API should implement the following endpoints:
 
 Authentication Endpoints
 
-POST /api/auth/signup: create a new user account.
-POST /api/auth/login: log in to an existing user account and receive an access token.
+POST /api/auth/signup: create a new user account.   Done
+POST /api/auth/login: log in to an existing user account and receive an access token.   Done
 
 Note Endpoints
 
-GET /api/notes: get a list of all notes for the authenticated user.
-GET /api/notes/ get a note by ID for the authenticated user.
-POST /api/notes: create a new note for the authenticated user.
-PUT /api/notes/ update an existing note by ID for the authenticated user.
-DELETE /api/notes/ delete a note by ID for the authenticated user.
+GET /api/notes/?userid = {userid}    -- get a list of all notes for the authenticated user. Done
+GET /api/notes:   -- get a note by ID for the authenticated user.    Done
+POST /api/notes   -- create a new note for the authenticated user.  Done
+PUT /api/notes/   -- update an existing note by noteID for the authenticated user.
+DELETE /api/notes/   -- delete a note by noteID for the authenticated user.
+
 POST /api/notes/:id/share: share a note with another user for the authenticated user.
 GET /api/search?q=:query: search for notes based on keywords for the authenticated user.
 

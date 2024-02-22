@@ -37,7 +37,7 @@ async function registerUser(username, password) {
         const Note = connect_notesdb();
         // Create a default note for the user
         const defaultNote = new Note({
-            noteId: generateNoteId(),
+            noteId: generateNoteId(userId),
             title: "Default Note",
             content: "This is your default note. Feel free to edit or delete it.",
             createdAt: new Date()
@@ -60,14 +60,14 @@ async function registerUser(username, password) {
     }
 }
 
-function generateNoteId() {
+function generateNoteId(userId) {
     // Generate a unique note ID up to 4 characters and append it with "note"
     const uniqueId = Math.random().toString(36).substring(2, 6);
-    return `note${uniqueId}`;
+    return `${userId}${uniqueId}`;
 }
 
 function generateUserId() {
-    return Math.random().toString(36).substring(2, 10);     // // Generate an 8-character alphanumeric user ID
+    return Math.random().toString(36).substring(2, 6);     // // Generate an 8-character alphanumeric user ID
 }
 // Export the function
 module.exports = registerUser;
