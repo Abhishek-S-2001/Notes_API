@@ -28,7 +28,7 @@ Note Endpoints
 GET /api/notes/?userid = {userid}    -- get a list of all notes for the authenticated user. Done
 GET /api/notes:   -- get a note by ID for the authenticated user.    Done
 POST /api/notes   -- create a new note for the authenticated user.  Done
-PUT /api/notes/   -- update an existing note by noteID for the authenticated user.
+PUT /api/notes/   -- update an existing note by noteID for the authenticated user.  Done
 DELETE /api/notes/   -- delete a note by noteID for the authenticated user.
 
 POST /api/notes/:id/share: share a note with another user for the authenticated user.

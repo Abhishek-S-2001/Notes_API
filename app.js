@@ -6,6 +6,8 @@ const signInUser = require('./src/sign_in')
 const addNote = require('./src/add_note')
 const getNoteById = require('./src/get_note')
 const getAllNotes = require('./src/get_all_notes')
+const updateNote = require('./src/update_note')
+const deleteNote = require('./src/delete_note')
 
 const app = express();
 
@@ -78,6 +80,31 @@ app.get("/api/notes", async (req, res) => {
   try {
       const notesList = await getAllNotes(userid);
       res.status(200).json(notesList);
+  } catch (error) {
+      res.status(500).json({ error: error.message });
+  }
+});
+
+// Update Note route
+app.put("/api/notes/:noteID", async (req, res) => {
+  const noteId = req.params.noteID;
+  const { title, content } = req.body;
+
+  try {
+      await updateNote(noteId, title, content);
+      res.status(200).json({ message: "Note updated successfully." });
+  } catch (error) {
+      res.status(500).json({ error: error.message });
+  }
+});
+
+// Delete Note route
+app.delete("/api/notes", async (req, res) => {
+  const { userid, noteId } = req.body;
+
+  try {
+      await deleteNote(userid, noteId);
+      res.status(200).json({ message: "Note deleted successfully." });
   } catch (error) {
       res.status(500).json({ error: error.message });
   }
