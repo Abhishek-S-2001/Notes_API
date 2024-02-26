@@ -9,17 +9,29 @@ The Notes API is a simple Node.js application that provides endpoints for managi
 - [Features](#features)
 - [Getting Started](#getting-started)
 - [Endpoints](#endpoints)
-- [Usage](#usage)
-- [Contributing](#contributing)
-- [License](#license)
+
 
 ## Features
 
-- User Registration
-- User Authentication
-- Add Notes
-- Update Notes
-- Retrieve User Information
+- **User Registration:**
+  - Register with a unique username and password.
+  - Generates a unique user ID for each registration.
+
+- **User Authentication:**
+  - Authenticate using a registered username and password.
+  - Obtain an access token for secure API access.
+
+- **Add Notes:**
+  - Add new notes with a title and content.
+  - Each note has a unique note ID.
+
+- **Update Notes:**
+  - Modify the title and content of existing notes.
+  - Update based on the unique note ID.
+
+- **Delete Notes:**
+  - Delete notes securely with the unique note ID.
+  - Remove the note ID from the user's entry.
 
 
 ## Getting Started
@@ -53,7 +65,8 @@ The Notes API is a simple Node.js application that provides endpoints for managi
 
 - **User Registration:** `/api/auth/signup` (POST)
 - **User Authentication:** `/api/auth/signin` (POST)
-- **Add Note:** `/api/notes/add` (POST)
-- **Update Note:** `/api/notes/update/:noteId` (PUT)
-- **Retrieve User Information:** `/api/user/:userId` (GET)
-```
+- **Add Note** `/api/notes/add` (POST)
+- **Retrieve Notes** `/api/notes/:noteID` (GET)
+- **Retrieve All Notes Of User** `/api/notes` (GET)
+- **Update Note** `/api/notes/:noteId` (PUT)
+- **Delete Note** `/api/notes` (DELETE)
