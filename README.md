@@ -50,13 +50,12 @@ The Notes API is a RESTful Node.js application designed for efficient note manag
    npm install
    ```
 
-3. **Set up your MongoDB database.**
+3. **Set up your MongoDB database:**
 
-4. **Update the .env file:**
+   - Install MongoDB if not already installed on your system.
+   - Create a new MongoDB database for the Notes API, e.g., `notes_db`.
 
-   - Add your MongoDB connection string and other configurations.
-
-5. **Run the application:**
+4. **Run the application:**
 
    ```bash
    npm start
