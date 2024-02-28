@@ -1,5 +1,9 @@
 const express = require('express');
 const body_parser = require('body-parser');
+const jwt = require('jsonwebtoken')
+const bcrypt = require('bcrypt')
+
+const config = require('./config')
 
 const registerUser = require('./src/register_user')
 const signInUser = require('./src/sign_in')
@@ -13,6 +17,10 @@ const app = express();
 
 // Middleware to parse JSON in the request body
 app.use(body_parser.json());
+
+// Secret key for JWT  // Do Not change the seceretKey
+const secretKey = config.JWT_Secret_key;      //jsonwebtoken uses a secret key to encrypt and decrypt the token
+console.log(secretKey)
 
 app.get("/", (req, res) => {
     return res.send("API Started on port 3000");
