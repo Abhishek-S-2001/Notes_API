@@ -58,7 +58,12 @@ The Notes API, built on Node.js and Express.js, offers a seamless note managemen
    - Install MongoDB if not already installed on your system.
    - Create a new MongoDB database for the Notes API, e.g., `notes_db`.
 
-4. **Run the application:**
+4. **Change access key:**
+
+  - Change the both access key for access and refresh token.
+  - File Location : `./src/Authentication/access_token.js`
+
+5. **Run the application:**
 
    ```bash
    npm start
