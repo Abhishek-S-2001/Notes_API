@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Notes API is a RESTful Node.js application designed for efficient note management. It seamlessly integrates CRUD (Create, Read, Update, Delete) operations, allowing users to create, retrieve, update, and delete notes effortlessly. Adhering to RESTful principles, each endpoint corresponds to a specific action, simplifying interactions. Powered by Node.js, Express.js, and MongoDB, this API provides a scalable and user-friendly solution for personalized note-taking experiences.
+The Notes API, built on Node.js and Express.js, offers a seamless note management experience with a focus on secure authentication using JSON Web Tokens (JWT). Users can easily create, read, update, and delete notes through RESTful endpoints. JWTs are employed to authenticate users, ensuring secure access to personalized data. Token expiration is handled intelligently, allowing for smooth access renewal. This API provides a scalable solution, aligning with modern authentication practices for a secure and efficient note-taking experience.
 
 ## Table of Contents
 
@@ -11,16 +11,19 @@ The Notes API is a RESTful Node.js application designed for efficient note manag
 - [Endpoints](#endpoints)
 - [Testing (Postman)](#testing-the-api-with-postman)
 
-
 ## Features
 
 - **User Registration:**
   - Register with a unique username and password.
   - Generates a unique user ID for each registration.
 
-- **User Authentication:**
-  - Authenticate using a registered username and password.
-  - Obtain an access token for secure API access.
+- **Authentication:**
+  - JWT (JSON Web Tokens) are used for user authentication. Upon successful login or registration, the server issues an access token with a short expiration time.
+  - Additionally, a refresh token with a longer expiration time is generated. The access token is required for most API requests, and the refresh token is used to obtain a new access token without requiring the user to log in again.
+
+- **Token Expiration Handling**
+  - The server checks for the expiration of access tokens during API requests. If an access token has expired, the server attempts to refresh it using the provided refresh token. 
+  - If the refresh token has also expired, the server responds with a message indicating that the user needs to sign in again.
 
 - **Add Notes:**
   - Add new notes with a title and content.
@@ -99,6 +102,8 @@ The Notes API is a RESTful Node.js application designed for efficient note manag
      }
      ```
    - Execute the request to obtain an access token for API access.
+
+**Note:** This Access Tokens will be required to pass with the headers by client Side.  
 
 3. **Add Note:**
 

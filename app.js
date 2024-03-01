@@ -9,7 +9,7 @@ const getNoteById = require('./src/CRUD_Routes/get_note')
 const getAllNotes = require('./src/CRUD_Routes/get_all_notes')
 const updateNote = require('./src/CRUD_Routes/update_note')
 const deleteNote = require('./src/CRUD_Routes/delete_note')
-const { generateAccessToken, authenticateToken } = require('./src/Authentication/access_token')
+const { generateAccessToken, generateRefreshToken, authenticateToken } = require('./src/Authentication/access_token')
 
 const app = express();
 
@@ -50,9 +50,11 @@ app.post("/api/auth/signin", async (req, res) => {
       const userInfo = await signInUser(username, password);
       // Generate an access token
       const accessToken = generateAccessToken(userInfo.user);
+      const refreshToken = generateRefreshToken(userInfo.user);
 
-      res.status(200).json({accessToken : accessToken, userData: userInfo.userData});
+      res.status(200).json({accessToken : accessToken, refreshToken: refreshToken, userData: userInfo.userData});
   } catch (error) {
+    console.log(error)
       res.status(401).json({ error: error.message });
   }
 });
