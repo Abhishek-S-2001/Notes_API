@@ -1,26 +1,21 @@
 const express = require('express');
 const body_parser = require('body-parser');
-const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 
-const config = require('./config')
-
-const registerUser = require('./src/register_user')
-const signInUser = require('./src/sign_in')
-const addNote = require('./src/add_note')
-const getNoteById = require('./src/get_note')
-const getAllNotes = require('./src/get_all_notes')
-const updateNote = require('./src/update_note')
-const deleteNote = require('./src/delete_note')
+const registerUser = require('./src/Authentication/register_user')
+const signInUser = require('./src/Authentication/sign_in')
+const addNote = require('./src/CRUD_Routes/add_note')
+const getNoteById = require('./src/CRUD_Routes/get_note')
+const getAllNotes = require('./src/CRUD_Routes/get_all_notes')
+const updateNote = require('./src/CRUD_Routes/update_note')
+const deleteNote = require('./src/CRUD_Routes/delete_note')
+const { generateAccessToken, authenticateToken } = require('./src/Authentication/access_token')
 
 const app = express();
 
 // Middleware to parse JSON in the request body
 app.use(body_parser.json());
 
-// Secret key for JWT  // Do Not change the seceretKey
-const secretKey = config.JWT_Secret_key;      //jsonwebtoken uses a secret key to encrypt and decrypt the token
-console.log(secretKey)
 
 app.get("/", (req, res) => {
     return res.send("API Started on port 3000");
@@ -36,8 +31,10 @@ app.post('/api/auth/signup', async (req, res) => {
       if (!username || !password) {
           return res.status(400).json({ error: "Username and password are required." });
       }
+      // Hash the password before storing it
+      const hashedPassword = await bcrypt.hash(password, 10);
 
-      const userId = await registerUser(username, password);
+      const userId = await registerUser(username, hashedPassword);
 
       res.status(201).json({ userId, message: "User registered successfully." });
   } catch (error) {
@@ -50,15 +47,18 @@ app.post('/api/auth/signup', async (req, res) => {
 app.post("/api/auth/signin", async (req, res) => {
   const { username, password } = req.body;
   try {
-      const userData = await signInUser(username, password);
-      res.status(200).json(userData);
+      const userInfo = await signInUser(username, password);
+      // Generate an access token
+      const accessToken = generateAccessToken(userInfo.user);
+
+      res.status(200).json({accessToken : accessToken, userData: userInfo.userData});
   } catch (error) {
       res.status(401).json({ error: error.message });
   }
 });
 
 // Add Note route
-app.post("/api/notes", async (req, res) => {
+app.post("/api/notes", authenticateToken, async (req, res) => {
   const { userid, title, content } = req.body;
 
   try {
@@ -71,7 +71,7 @@ app.post("/api/notes", async (req, res) => {
 
 
 // Get Note by ID route
-app.get("/api/notes/:noteID", async (req, res) => {
+app.get("/api/notes/:noteID", authenticateToken, async (req, res) => {
   const noteId = req.params.noteID;
 
   try {
@@ -83,7 +83,7 @@ app.get("/api/notes/:noteID", async (req, res) => {
 });
 
 // Get all Notes route
-app.get("/api/notes", async (req, res) => {
+app.get("/api/notes", authenticateToken, async (req, res) => {
   const { userid } = req.query;
   try {
       const notesList = await getAllNotes(userid);
@@ -94,7 +94,7 @@ app.get("/api/notes", async (req, res) => {
 });
 
 // Update Note route
-app.put("/api/notes/:noteID", async (req, res) => {
+app.put("/api/notes/:noteID", authenticateToken, async (req, res) => {
   const noteId = req.params.noteID;
   const { title, content } = req.body;
 
@@ -107,7 +107,7 @@ app.put("/api/notes/:noteID", async (req, res) => {
 });
 
 // Delete Note route
-app.delete("/api/notes", async (req, res) => {
+app.delete("/api/notes", authenticateToken, async (req, res) => {
   const { userid, noteId } = req.body;
 
   try {

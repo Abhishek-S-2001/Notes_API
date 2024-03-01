@@ -2,6 +2,8 @@ const connect_userdb = require('../database/userdb');
 const connect_getnotesdb = require('../database/getnotesdb');
 const connect_notesdb = require('../database/notesdb');
 
+const bcrypt = require('bcrypt')
+
 async function signInUser(username, password) {
     try {
         // Connect to the users database
@@ -10,12 +12,14 @@ async function signInUser(username, password) {
         // Check if the user exists
         const user = await User.findOne({ username });
         if (!user) {
-            throw new Error("Username not found. Please register first.");
+            throw new Error("Username not found!!!. Please register first.");
         }
 
-        // Check if the password matches
-        if (user.password != password) {
-            throw new Error("Incorrect password. Please try again.");
+        // Compare the provided password with the stored hashed password
+        const passwordMatch = await bcrypt.compare(password, user.password);
+
+        if (!passwordMatch) {
+        return res.status(401).json({ message: 'Invalid Password!!!. Please try again.' });
         }
 
         // Retrieve user data including note IDs and titles
@@ -24,7 +28,8 @@ async function signInUser(username, password) {
             noteData: await getNoteData(user.userid)
         };
 
-        return userData;
+
+        return {user, userData};
     } catch (error) {
         throw error;
     }

@@ -6,18 +6,17 @@ async function addNote(userid, title, content) {
         // Connect to the database
         const GetNotes = connect_getnotesdb();
         const Note = connect_notesdb();
-
         // Find the user's entry in getnotes database
         const userGetNotesEntry = await GetNotes.findOne({ userid });
 
         // Generate a unique note ID for the user
-        const uniqueId = Math.random().toString(36).substring(2, 6);
-        const noteId = `${userid}${uniqueId}`;
+        let uniqueId = Math.random().toString(36).substring(2, 6);
+        let noteId = `${userid}${uniqueId}`;
 
         // Check if the generated NoteId is already in use
         while (await Note.findOne({ noteid: noteId })) {
-            const uniqueId = Math.random().toString(36).substring(2, 6);
-            const noteId = `${userid}${uniqueId}`;
+            uniqueId = Math.random().toString(36).substring(2, 6);
+            noteId = `${userid}${uniqueId}`;
         }
 
         // Create a new note
@@ -35,6 +34,7 @@ async function addNote(userid, title, content) {
 
         return noteId;
     } catch (error) {
+        console.error(error)
         throw error;
     }
 }
